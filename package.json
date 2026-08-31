@@ -1,0 +1,26 @@
+{
+  "name": "agentx-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AgentX — The intelligent marketplace for autonomous agents on BNB Chain",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/web",
+    "build:packages": "npm run build --workspace=@agentx/domain && npm run build --workspace=@agentx/validation && npm run build --workspace=@agentx/blockchain && npm run build --workspace=@agentx/agents && npm run build --workspace=@agentx/ui && npm run build --workspace=@agentx/db",
+    "build": "npm run build:packages && npm run build --workspace=web",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspace=apps/web",
+    "db:generate": "npm run generate --workspace=packages/db"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.7"
+  }
+}

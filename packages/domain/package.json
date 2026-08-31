@@ -1,0 +1,17 @@
+{
+  "name": "@agentx/domain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pure business and domain logic for AgentX",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.2"
+  }
+}

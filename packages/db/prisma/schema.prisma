@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PrismaAgentCategory {
+  REBALANCING
+  GRID_TRADING
+  YIELD_OPTIMIZATION
+  HEALTH_FACTOR
+}
+
+enum PrismaVerificationStatus {
+  ONCHAIN_VERIFIED
+  PROTOCOL_VERIFIED
+  AGENT_REPORTED
+  UNVERIFIED
+}
+
+enum PrismaAgentStatus {
+  ACTIVE
+  PAUSED
+  DEPRECATED
+}
+
+enum PrismaExecutionStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+model Agent {
+  id                 String                   @id @default(cuid())
+  externalId         String                   @unique
+  name               String
+  slug               String                   @unique
+  description        String
+  category           PrismaAgentCategory
+  capabilities       String[]
+  ownerAddress       String
+  chainId            Int                      @default(56)
+  identityAddress    String
+  status             PrismaAgentStatus        @default(ACTIVE)
+  verificationStatus PrismaVerificationStatus @default(UNVERIFIED)
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  performance        AgentPerformanceRecord?
+  executions         AgentExecutionRecord[]
+  reviews            AgentReviewRecord[]
+
+  @@index([category])
+  @@index([verificationStatus])
+  @@index([status])
+  @@index([identityAddress])
+  @@index([ownerAddress])
+}
+
+model AgentPerformanceRecord {
+  id                 String                   @id @default(cuid())
+  agentId            String                   @unique
+  agent              Agent                    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  totalExecutions    Int                      @default(0)
+  successfulExecutions Int                    @default(0)
+  failedExecutions   Int                      @default(0)
+  successRate        Float                    @default(0)
+  avgExecutionTimeMs Int                      @default(0)
+  avgCostUsd         Float                    @default(0)
+  maxDrawdownPercent Float                    @default(0)
+  verificationStatus PrismaVerificationStatus @default(UNVERIFIED)
+  lastExecutionAt    DateTime?
+  updatedAt          DateTime                 @updatedAt
+
+  @@index([verificationStatus])
+  @@index([successRate])
+}
+
+model AgentExecutionRecord {
+  id                 String                   @id @default(cuid())
+  agentId            String
+  agent              Agent                    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  taskName           String
+  status             PrismaExecutionStatus    @default(PENDING)
+  startedAt          DateTime                 @default(now())
+  completedAt        DateTime?
+  durationMs         Int?
+  costUsd            Float?
+  txHash             String?
+  blockNumber        BigInt?
+  resultJson         Json?
+  verificationStatus PrismaVerificationStatus @default(UNVERIFIED)
+  errorMessage       String?
+
+  @@index([agentId])
+  @@index([status])
+  @@index([txHash])
+  @@index([verificationStatus])
+  @@index([startedAt])
+}
+
+model AgentReviewRecord {
+  id                 String                   @id @default(cuid())
+  agentId            String
+  agent              Agent                    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  reviewerAddress    String
+  rating             Int
+  title              String
+  comment            String
+  proofTxHash        String?
+  verificationStatus PrismaVerificationStatus @default(UNVERIFIED)
+  createdAt          DateTime                 @default(now())
+
+  @@index([agentId])
+  @@index([reviewerAddress])
+  @@index([rating])
+  @@index([verificationStatus])
+}

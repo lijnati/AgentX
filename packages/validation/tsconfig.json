@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true,
+    "paths": {
+      "@agentx/domain": ["../domain/src"]
+    }
+  },
+  "references": [
+    { "path": "../domain" }
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["src/**/__tests__/*", "src/**/*.test.ts", "src/**/*.spec.ts"]
+}

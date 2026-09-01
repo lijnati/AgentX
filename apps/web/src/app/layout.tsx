@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navbar';
-import { NetworkTicker } from '@/components/network-ticker';
 import { Footer } from '@/components/footer';
 
 const geistSans = Geist({
@@ -24,7 +23,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${geistSans.variable}`}>
       <body className="min-h-screen bg-[#06080d] text-zinc-100 font-sans flex flex-col antialiased selection:bg-amber-400/25 selection:text-white">
-        <NetworkTicker />
         <Navbar />
         <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
           {children}

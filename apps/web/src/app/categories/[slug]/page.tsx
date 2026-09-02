@@ -1,23 +1,26 @@
 'use client';
 
-import React, { use } from 'react';
+import React, { use, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import {
   AgentCategory,
   CAPABILITY_DEFINITIONS,
   getCategoryMetadata,
+  CANONICAL_AGENTS,
+  Agent,
 } from '@agentx/domain';
 import {
   CategoryBadge,
   PageHeader,
   SectionHeader,
-  EmptyState,
+  FilterBar,
+  AgentGrid,
+  CapabilityBadge,
 } from '@agentx/ui';
 import {
   ArrowLeft,
-  Activity,
-  Layers,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface CategorySlugMap {
@@ -46,8 +49,37 @@ export default function CategoryDetailPage({
 
   const meta = getCategoryMetadata(categoryKey);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedVerification, setSelectedVerification] = useState<string>('ALL');
+  const [selectedRisk, setSelectedRisk] = useState<string>('ALL');
+  const [selectedProtocol, setSelectedProtocol] = useState<string>('ALL');
+  const [sortOption, setSortOption] = useState<string>('RECOMMENDED');
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+
+  // Filter canonical agents for this specific category
+  const categoryAgents = useMemo(() => {
+    return CANONICAL_AGENTS.filter((agent: Agent) => {
+      if (agent.category !== categoryKey) {
+        return false;
+      }
+      if (selectedVerification !== 'ALL' && agent.verificationStatus !== selectedVerification) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchesName = agent.name.toLowerCase().includes(q);
+        const matchesDesc = agent.description.toLowerCase().includes(q);
+        const matchesCap = agent.capabilities.some((c) => c.toLowerCase().includes(q));
+        if (!matchesName && !matchesDesc && !matchesCap) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [categoryKey, searchQuery, selectedVerification]);
+
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 font-sans">
       {/* Back Button */}
       <div>
         <Link
@@ -59,7 +91,7 @@ export default function CategoryDetailPage({
         </Link>
       </div>
 
-      {/* Page Header */}
+      {/* 1. Category Header */}
       <PageHeader
         badge={<CategoryBadge category={categoryKey} size="md" />}
         title={meta.name}
@@ -81,106 +113,112 @@ export default function CategoryDetailPage({
         }
       />
 
-      {/* Required Capabilities & Telemetry Invariants */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Expected Capabilities (2 cols) */}
-        <div className="lg:col-span-2 space-y-4">
-          <SectionHeader
-            title="Expected Autonomous Capabilities"
-            description="Agents registered under this category must declare and implement these core functional competencies."
-          />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {meta.expectedCapabilities.map((cap) => {
-              const def = CAPABILITY_DEFINITIONS[cap];
-              return (
-                <div
-                  key={cap}
-                  className="rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 p-4 space-y-2 backdrop-blur-sm"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-semibold text-zinc-100">{def.name}</span>
-                    <span
-                      className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${
-                        def.riskLevel === 'HIGH'
-                          ? 'text-red-400 border-red-500/30 bg-red-500/10'
-                          : def.riskLevel === 'MEDIUM'
-                          ? 'text-amber-400 border-amber-500/30 bg-amber-500/10'
-                          : 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10'
-                      }`}
-                    >
-                      {def.riskLevel}
-                    </span>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-                    {def.shortDescription}
-                  </p>
-                  <div className="pt-1 text-[11px] text-zinc-500">
-                    Scope:{' '}
-                    {def.requiresContractExecution ? (
-                      <span className="text-emerald-400 font-medium">Smart Contract State</span>
-                    ) : (
-                      <span className="text-zinc-400">Read-Only Telemetry</span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Standard Telemetry Invariants (1 col) */}
-        <div className="space-y-4">
-          <SectionHeader
-            title="Standard Telemetry"
-            description="Metrics indexed from on-chain receipts."
-          />
-
-          <div className="rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200">
-              <Activity className="w-4 h-4 text-amber-400" />
-              <span>Standard Invariants</span>
-            </div>
-
-            <ul className="space-y-2.5 text-xs font-sans">
-              {meta.standardMetrics.map((metric) => (
-                <li
-                  key={metric}
-                  className="flex items-center justify-between border-b border-zinc-800/60 pb-2 text-zinc-300"
-                >
-                  <span>{metric}</span>
-                  <span className="text-emerald-400 font-medium text-[11px]">
-                    Standardized
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="pt-2 text-[11px] text-zinc-500 leading-relaxed">
-              * Invariants are computed across block receipts and protocol oracles without human alteration.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Category Agent Marketplace Grid */}
+      {/* 2. AVAILABLE AGENTS DIRECTORY (FIRST IN PRIORITY) */}
       <section className="space-y-6">
         <SectionHeader
-          title={`${meta.name} Directory`}
-          description={`Browse active autonomous agents specialized in ${meta.name.toLowerCase()} on BNB Chain.`}
+          title={`Available ${meta.name} Agents`}
+          description={`Browse and evaluate active autonomous agents specialized in ${meta.name.toLowerCase()} on BNB Chain.`}
         />
 
-        {/* Empty state ready for indexing */}
-        <EmptyState
-          icon={<Layers className="h-6 w-6 text-zinc-400" />}
-          title={`Awaiting Indexed ${meta.name} Agents`}
-          description={`No ${meta.name.toLowerCase()} agents are currently registered in the database. When operators register agents via ERC-8004 identity or on-chain manifests, they will be verified and displayed here.`}
-          reason="Milestone 0 Foundation Active — Zero Synthetic/Fake Data Enforced"
-          actionLabel="View All Categories"
-          actionHref="/categories"
-          secondaryActionLabel="Explore Marketplace"
-          secondaryActionHref="/"
+        {/* Filter & Search Controls */}
+        <FilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          verificationFilter={selectedVerification}
+          onVerificationChange={setSelectedVerification}
+          riskFilter={selectedRisk}
+          onRiskChange={setSelectedRisk}
+          protocolFilter={selectedProtocol}
+          onProtocolChange={setSelectedProtocol}
+          sortOption={sortOption}
+          onSortChange={setSortOption}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          resultCount={categoryAgents.length}
         />
+
+        {/* Agent Cards Grid */}
+        <AgentGrid
+          agents={categoryAgents}
+          emptyTitle={`No matching ${meta.name} agents found`}
+          emptyDescription={`Try adjusting your search criteria or trust tier filter.`}
+          emptyActionLabel="View All Categories"
+          emptyActionHref="/categories"
+        />
+      </section>
+
+      {/* 3. Category Capabilities & Scope (Secondary Information) */}
+      <section className="space-y-6 pt-4 border-t border-zinc-800/80">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Expected Capabilities (2 cols) */}
+          <div className="lg:col-span-2 space-y-4">
+            <SectionHeader
+              title="Category Execution Capabilities"
+              description={`Key tasks and smart contract actions ${meta.name.toLowerCase()} agents can execute.`}
+            />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {meta.expectedCapabilities.map((cap) => {
+                const def = CAPABILITY_DEFINITIONS[cap];
+                return (
+                  <div
+                    key={cap}
+                    className="rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 p-4 space-y-2 backdrop-blur-sm"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-zinc-100">{def.name}</span>
+                      <CapabilityBadge capability={cap} showRisk />
+                    </div>
+                    <p className="text-xs text-zinc-400 leading-relaxed font-sans pt-1">
+                      {def.shortDescription}
+                    </p>
+                    <div className="pt-2 text-[11px] text-zinc-500 border-t border-zinc-800/60 flex items-center justify-between">
+                      <span>Scope:</span>
+                      {def.requiresContractExecution ? (
+                        <span className="text-emerald-400 font-medium">Smart Contract State</span>
+                      ) : (
+                        <span className="text-zinc-400">Read-Only Telemetry</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Standard Telemetry & Verification (1 col) */}
+          <div className="space-y-4">
+            <SectionHeader
+              title="How Performance is Proven"
+              description="Metrics indexed from on-chain receipts."
+            />
+
+            <div className="rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 p-5 space-y-3">
+              <div className="flex items-center gap-2 text-xs font-semibold text-zinc-200">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <span>Standardized Invariants</span>
+              </div>
+
+              <ul className="space-y-2.5 text-xs font-sans">
+                {meta.standardMetrics.map((metric) => (
+                  <li
+                    key={metric}
+                    className="flex items-center justify-between border-b border-zinc-800/60 pb-2 text-zinc-300"
+                  >
+                    <span>{metric}</span>
+                    <span className="text-emerald-400 font-medium text-[11px]">
+                      Verified on Receipt
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="pt-2 text-[11px] text-zinc-500 leading-relaxed">
+                Verified execution history helps you evaluate whether this agent actually works before hiring.
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

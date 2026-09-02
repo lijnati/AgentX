@@ -12,13 +12,13 @@ import { Layers } from 'lucide-react';
 
 export default function CategoriesPage() {
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 font-sans">
       {/* Page Header */}
       <PageHeader
         badge={
           <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 uppercase tracking-wider">
             <Layers className="w-3.5 h-3.5 text-amber-400" />
-            <span>Architecture & Taxonomy</span>
+            <span>Marketplace Taxonomy</span>
           </span>
         }
         title="First-Class Agent Categories"
@@ -32,14 +32,18 @@ export default function CategoriesPage() {
           description="Select a category to view specialized execution mechanics, live invariant requirements, and filtered agent directories."
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {AgentCategoriesList.map((catKey) => {
-            const slug = catKey.toLowerCase().replace('_', '-');
+            const slug =
+              catKey === 'YIELD_OPTIMIZATION'
+                ? 'yield'
+                : catKey.toLowerCase().replace('_', '-');
+
             return (
               <Link
                 key={catKey}
                 href={`/categories/${slug}`}
-                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-xl"
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-2xl block"
               >
                 <CategoryCard category={catKey} />
               </Link>
@@ -60,7 +64,7 @@ export default function CategoriesPage() {
           description="Domain definitions governing smart contract interaction permissions, telemetry access, and execution risk parameters on BNB Chain."
         />
 
-        <div className="overflow-hidden rounded-xl border border-zinc-800/80 bg-[#0b0e17]/90 backdrop-blur-sm shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/90 backdrop-blur-sm shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="border-b border-zinc-800/80 bg-zinc-900/50 text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">

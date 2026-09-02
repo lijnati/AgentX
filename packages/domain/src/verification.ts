@@ -68,12 +68,12 @@ export function getVerificationLabel(status: VerificationStatus): string {
 export function getVerificationDescription(status: VerificationStatus): string {
   switch (status) {
     case 'ONCHAIN_VERIFIED':
-      return 'Directly indexed and proved by BNB Smart Chain transaction receipts and smart contract state.';
+      return 'Performance and identity are independently verified by on-chain records on BNB Smart Chain.';
     case 'PROTOCOL_VERIFIED':
-      return 'Attested by an audited integrated DeFi protocol or cryptographically signed oracle feed.';
+      return 'Performance is attested by integrated audited DeFi protocols and signed cryptographic oracle feeds.';
     case 'AGENT_REPORTED':
-      return 'Self-reported telemetry provided by the agent operator without cryptographic on-chain proof.';
+      return 'Performance is reported directly by the agent operator and has not been independently verified on-chain.';
     case 'UNVERIFIED':
-      return 'Unsubstantiated metadata or pending initial verification pipeline check.';
+      return 'Metadata is unverified or pending initial verification pipeline audit.';
   }
 }

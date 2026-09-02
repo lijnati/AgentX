@@ -107,14 +107,11 @@ export function Navbar() {
           <button
             type="button"
             disabled
-            title="Wallet connection integration scheduled for future milestone"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-zinc-800/80 bg-zinc-900/40 text-xs font-medium text-zinc-400 cursor-not-allowed select-none opacity-80 font-sans"
+            title="Wallet connectivity connects with the execution runtime"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border border-zinc-800/80 bg-zinc-900/40 text-xs font-medium text-zinc-400 cursor-not-allowed select-none opacity-80 font-sans"
           >
             <Wallet className="w-3.5 h-3.5 text-zinc-500" />
             <span>Connect Wallet</span>
-            <span className="px-1.5 py-0.2 rounded text-[10px] bg-zinc-800 text-zinc-400 font-medium">
-              M1
-            </span>
           </button>
         </div>
 
@@ -170,7 +167,7 @@ export function Navbar() {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               <span>BNB Chain (ID 56)</span>
             </div>
-            <span>v0.1.0-M0</span>
+            <span>v0.1.0</span>
           </div>
         </div>
       )}

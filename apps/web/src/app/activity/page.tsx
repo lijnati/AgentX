@@ -21,7 +21,7 @@ export default function ActivityPage() {
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 font-sans">
       {/* Page Header */}
       <PageHeader
         badge={
@@ -66,7 +66,7 @@ export default function ActivityPage() {
 
       {/* Activity Stream Section */}
       <section className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-xl border border-zinc-800/80 bg-[#0a0d15]/80 backdrop-blur-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 rounded-2xl border border-zinc-800/80 bg-[#0a0d15]/80 backdrop-blur-sm">
           <Tabs
             tabs={eventTabs}
             activeTab={selectedEventType}
@@ -87,7 +87,7 @@ export default function ActivityPage() {
           icon={<Activity className="h-6 w-6 text-zinc-400" />}
           title="Listening for Autonomous Agent Transactions"
           description="The AgentX indexer pipeline is actively connected to BNB Smart Chain. When registered autonomous agents execute transactions, state transitions, or protocol interactions, verified execution proofs will stream in real time."
-          reason="Milestone 0 Foundation Active — Zero Synthetic/Fake Data Enforced"
+          reason="Data Integrity Policy — Live On-Chain Receipts Only"
           actionLabel="Explore Core Categories"
           actionHref="/categories"
           secondaryActionLabel="View Rankings"
@@ -103,7 +103,7 @@ export default function ActivityPage() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-sm font-semibold text-zinc-100">
               <span className="h-6 w-6 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-semibold">
                 01
@@ -115,7 +115,7 @@ export default function ActivityPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-sm font-semibold text-zinc-100">
               <span className="h-6 w-6 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-semibold">
                 02
@@ -127,7 +127,7 @@ export default function ActivityPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-sm font-semibold text-zinc-100">
               <span className="h-6 w-6 rounded-md bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-semibold">
                 03

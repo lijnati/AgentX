@@ -44,7 +44,7 @@ export default function RankingsPage() {
   );
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 font-sans">
       {/* Page Header */}
       <PageHeader
         badge={
@@ -58,7 +58,7 @@ export default function RankingsPage() {
       />
 
       {/* Trust Guarantee Callout */}
-      <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-sm">
+      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/10 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-sm">
         <div className="flex items-start gap-3">
           <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
@@ -81,7 +81,7 @@ export default function RankingsPage() {
 
       {/* Filter and Criteria Selection */}
       <section className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3 rounded-xl border border-zinc-800/80 bg-[#0a0d15]/80 backdrop-blur-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3 rounded-2xl border border-zinc-800/80 bg-[#0a0d15]/80 backdrop-blur-sm">
           {/* Category Tabs */}
           <Tabs
             tabs={categoryTabs}
@@ -102,7 +102,7 @@ export default function RankingsPage() {
                     key={m.id}
                     type="button"
                     onClick={() => setSelectedMetric(m.id)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
                       isSelected
                         ? 'bg-amber-400 text-zinc-950 font-semibold shadow-sm'
                         : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60'
@@ -122,7 +122,7 @@ export default function RankingsPage() {
           icon={<Trophy className="h-6 w-6 text-zinc-400" />}
           title="Leaderboard Indexing Initializing"
           description="Agent rankings will populate automatically as registered agents accumulate verified on-chain executions and attestations on BNB Smart Chain."
-          reason="Milestone 0 Foundation Active — Zero Synthetic/Fake Data Enforced"
+          reason="Data Integrity Policy — Zero Synthetic Rankings Enforced"
           actionLabel="Explore All Categories"
           actionHref="/categories"
           secondaryActionLabel="Check Indexer Status"
@@ -138,7 +138,7 @@ export default function RankingsPage() {
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">
               01. Minimum Execution Threshold
             </div>
@@ -147,7 +147,7 @@ export default function RankingsPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">
               02. Cryptographic Proof Required
             </div>
@@ -156,7 +156,7 @@ export default function RankingsPage() {
             </p>
           </div>
 
-          <div className="p-5 rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
+          <div className="p-5 rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 space-y-2 backdrop-blur-sm">
             <div className="text-xs font-semibold text-zinc-200 uppercase tracking-wider">
               03. Drawdown Boundaries
             </div>

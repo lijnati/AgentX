@@ -1,5 +1,7 @@
+'use client';
+
 import * as React from 'react';
-import { VerificationStatus, AgentCategory } from '@agentx/domain';
+import { VerificationStatus, AgentCategory, getVerificationLabel, getVerificationDescription } from '@agentx/domain';
 import { cn } from './utils';
 import { ShieldCheck, ShieldAlert, Cpu, HelpCircle } from 'lucide-react';
 
@@ -28,7 +30,7 @@ export function Badge({ className, variant = 'default', size = 'sm', ...props }:
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 font-medium border rounded-full transition-colors select-none',
+        'inline-flex items-center gap-1.5 font-medium border rounded-full transition-colors select-none font-sans',
         variantStyles[variant],
         sizeStyles[size],
         className
@@ -51,15 +53,18 @@ export function VerificationBadge({
   showDot = true,
   className,
 }: VerificationBadgeProps) {
+  const label = getVerificationLabel(status);
+  const description = getVerificationDescription(status);
+
   switch (status) {
     case 'ONCHAIN_VERIFIED':
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)]',
+            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.15)] font-sans select-none',
             className
           )}
-          title="Directly verified on BNB Smart Chain via transaction receipts & contract state"
+          title={`${label}: ${description}`}
         >
           {showDot && (
             <span className="relative flex h-1.5 w-1.5">
@@ -68,49 +73,49 @@ export function VerificationBadge({
             </span>
           )}
           {showIcon && <ShieldCheck className="w-3 h-3 text-emerald-400" />}
-          <span>On-Chain Verified</span>
+          <span>{label}</span>
         </span>
       );
     case 'PROTOCOL_VERIFIED':
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-sky-500/10 text-sky-400 border-sky-500/30 shadow-[0_0_12px_rgba(14,165,233,0.12)]',
+            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-sky-500/10 text-sky-400 border-sky-500/30 shadow-[0_0_12px_rgba(14,165,233,0.12)] font-sans select-none',
             className
           )}
-          title="Attested by integrated DeFi protocol or signed cryptographic oracle"
+          title={`${label}: ${description}`}
         >
           {showDot && <span className="inline-flex rounded-full h-1.5 w-1.5 bg-sky-400" />}
           {showIcon && <ShieldAlert className="w-3 h-3 text-sky-400" />}
-          <span>Protocol Verified</span>
+          <span>{label}</span>
         </span>
       );
     case 'AGENT_REPORTED':
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/30',
+            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-amber-500/10 text-amber-400 border-amber-500/30 font-sans select-none',
             className
           )}
-          title="Self-reported telemetry provided by agent operator without on-chain proof"
+          title={`${label}: ${description}`}
         >
           {showDot && <span className="inline-flex rounded-full h-1.5 w-1.5 bg-amber-400" />}
           {showIcon && <Cpu className="w-3 h-3 text-amber-400" />}
-          <span>Operator Reported</span>
+          <span>{label}</span>
         </span>
       );
     case 'UNVERIFIED':
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-zinc-800/40 text-zinc-400 border-zinc-700/50',
+            'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-medium tracking-wide rounded-full border bg-zinc-800/40 text-zinc-400 border-zinc-700/50 font-sans select-none',
             className
           )}
-          title="Unsubstantiated claim or pending initial verification"
+          title={`${label}: ${description}`}
         >
           {showDot && <span className="inline-flex rounded-full h-1.5 w-1.5 bg-zinc-500" />}
           {showIcon && <HelpCircle className="w-3 h-3 text-zinc-500" />}
-          <span>Unverified</span>
+          <span>{label}</span>
         </span>
       );
   }
@@ -152,7 +157,7 @@ export function CategoryBadge({ category, className, size = 'sm' }: CategoryBadg
   return (
     <span
       className={cn(
-        'inline-flex items-center font-medium rounded-full border transition-colors select-none',
+        'inline-flex items-center font-medium rounded-full border transition-colors select-none font-sans',
         current.className,
         sizeClass,
         className

@@ -13,10 +13,14 @@ export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivEl
   );
 }
 
+export function VerificationBadgeSkeleton() {
+  return <Skeleton className="h-5 w-28 rounded-full" />;
+}
+
 export function AgentCardSkeleton() {
   return (
-    <div className="flex flex-col justify-between rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 p-5 space-y-4">
-      <div className="space-y-3">
+    <div className="flex flex-col justify-between rounded-2xl border border-zinc-800/80 bg-[#0d101a]/95 p-6 space-y-5">
+      <div className="space-y-3.5">
         <div className="flex items-center justify-between">
           <Skeleton className="h-5 w-24 rounded-full" />
           <Skeleton className="h-5 w-28 rounded-full" />
@@ -40,9 +44,54 @@ export function AgentCardSkeleton() {
   );
 }
 
+export function CategoryListingSkeleton() {
+  return (
+    <div className="space-y-8 font-sans">
+      <div className="space-y-3 max-w-3xl">
+        <Skeleton className="h-5 w-32 rounded-full" />
+        <Skeleton className="h-9 w-3/4" />
+        <Skeleton className="h-4 w-full" />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <AgentCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function AgentDetailSkeleton() {
+  return (
+    <div className="space-y-10 font-sans">
+      {/* Header Skeleton */}
+      <div className="p-6 sm:p-8 rounded-3xl border border-zinc-800 bg-[#0b0e17] space-y-4">
+        <div className="flex items-center gap-3">
+          <Skeleton className="h-6 w-28 rounded-full" />
+          <Skeleton className="h-6 w-36 rounded-full" />
+        </div>
+        <Skeleton className="h-10 w-2/3" />
+        <Skeleton className="h-4 w-full" />
+        <Skeleton className="h-4 w-4/5" />
+      </div>
+
+      {/* Content Grid Skeleton */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-6">
+          <Skeleton className="h-48 rounded-2xl" />
+          <Skeleton className="h-48 rounded-2xl" />
+        </div>
+        <div className="space-y-6">
+          <Skeleton className="h-64 rounded-2xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MetricSkeleton() {
   return (
-    <div className="rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 p-5 space-y-2">
+    <div className="rounded-2xl border border-zinc-800/80 bg-[#0d101a]/95 p-5 space-y-2 font-sans">
       <div className="flex items-center justify-between">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-4 w-16 rounded-full" />
@@ -55,7 +104,7 @@ export function MetricSkeleton() {
 
 export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   return (
-    <div className="w-full rounded-xl border border-zinc-800/80 bg-[#0b0e17]/80 overflow-hidden">
+    <div className="w-full rounded-2xl border border-zinc-800/80 bg-[#0b0e17]/80 overflow-hidden font-sans">
       <div className="p-4 border-b border-zinc-800/60 flex gap-4">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-4 w-32" />

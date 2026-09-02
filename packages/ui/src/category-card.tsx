@@ -91,7 +91,7 @@ export function CategoryCard({ category, agentCount, onExplore, className }: Cat
 
           <span
             className={cn(
-              'text-[10px] font-medium tracking-wide uppercase px-2.5 py-0.5 rounded-full border',
+              'text-[10px] font-semibold tracking-wide uppercase px-2.5 py-0.5 rounded-full border',
               current.badgeStyle
             )}
           >
@@ -99,7 +99,7 @@ export function CategoryCard({ category, agentCount, onExplore, className }: Cat
           </span>
         </div>
 
-        {/* Title & Tagline */}
+        {/* Title & One-line outcome tagline */}
         <div className="space-y-1.5">
           <h3 className="text-base sm:text-lg font-semibold tracking-tight text-white group-hover:text-amber-300 transition-colors">
             {meta.name}
@@ -109,10 +109,10 @@ export function CategoryCard({ category, agentCount, onExplore, className }: Cat
           </p>
         </div>
 
-        {/* Expected Capabilities Pills */}
+        {/* What this agent executes */}
         <div className="space-y-1.5 pt-1">
-          <span className="text-[10px] uppercase font-semibold text-zinc-400 tracking-wider">
-            Key Capabilities
+          <span className="text-[10px] uppercase font-semibold text-zinc-500 tracking-wider">
+            Capabilities
           </span>
           <div className="flex flex-wrap gap-1.5">
             {meta.expectedCapabilities.map((cap) => {
@@ -132,12 +132,12 @@ export function CategoryCard({ category, agentCount, onExplore, className }: Cat
 
       {/* Footer / Explore CTA */}
       <div className="mt-6 pt-4 border-t border-zinc-800/60 flex items-center justify-between text-xs">
-        <span className="text-zinc-400 font-medium text-[11px]">
-          {agentCount !== undefined ? `${agentCount} agents` : 'Standard Invariants'}
+        <span className="text-zinc-500 font-medium text-[11px]">
+          {agentCount !== undefined ? `${agentCount} agents` : 'BNB Chain'}
         </span>
 
-        <span className="inline-flex items-center gap-1 font-medium text-amber-400 group-hover:text-amber-300 transition-colors">
-          <span>Explore</span>
+        <span className="inline-flex items-center gap-1 font-semibold text-amber-400 group-hover:text-amber-300 transition-colors">
+          <span>Explore Agents</span>
           <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
         </span>
       </div>
